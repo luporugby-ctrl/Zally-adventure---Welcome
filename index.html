@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis for Two: Welcome to Gemini</title>
-    <!-- Importiamo un font "pixel" o "mono" per l'effetto retro -->
+    <!-- Font Retro -->
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* --- STILE RETRO E CRT --- */
+        /* --- STILE RETRO CRT ARANCIONE/AMBRA --- */
         :root {
-            --phosphor-main: #33ff00; /* Verde Oscilloscopio */
-            --phosphor-dim: #238a09;
-            --bg-color: #0a0a0a;
-            --screen-overlay: rgba(0, 0, 0, 0.1);
+            /* NUOVA PALETTE ARANCIONE */
+            --phosphor-main: #ff7700; /* Arancione Neon intenso */
+            --phosphor-dim: #b35500;  /* Arancione più scuro per alone/ombre */
+            --bg-color: #0a0a0a;      /* Nero profondo */
+            --overlay-bg: rgba(20, 10, 0, 0.95); /* Sfondo modali leggermente ambrato */
         }
 
         body {
@@ -20,150 +21,100 @@
             color: var(--phosphor-main);
             font-family: 'VT323', monospace;
             margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            padding: 20px 0 0 0; /* Un po' di spazio in alto */
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
             display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            text-shadow: 0 0 2px var(--phosphor-dim), 0 0 8px var(--phosphor-main);
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Allinea in alto per far spazio all'header */
+            text-shadow: 0 0 6px var(--phosphor-dim);
+            box-sizing: border-box;
         }
 
-        /* Effetto Scanlines (righe TV vecchie) */
-        body::before {
+        /* Effetto Scanlines */
+        body::after {
             content: " ";
             display: block;
             position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 10, 10, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 100, 0, 0.06), rgba(255, 50, 0, 0.02), rgba(255, 150, 0, 0.06));
+            z-index: 10;
+            background-size: 100% 3px, 3px 100%;
             pointer-events: none;
         }
 
-        /* Container principale */
-        .game-container {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header e Animazione Tennis */
-        header {
+        /* NUOVO HEADER CENTRALE */
+        .main-header {
             text-align: center;
-            border-bottom: 2px solid var(--phosphor-main);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+            z-index: 5;
+            text-transform: uppercase;
         }
-
-        h1 {
-            font-size: 3rem;
+        .main-header h1 {
             margin: 0;
+            font-size: 3rem;
             letter-spacing: 2px;
         }
-
-        .subtitle {
+        .main-header h2 {
+            margin: 0;
             font-size: 1.5rem;
             color: var(--phosphor-dim);
         }
 
-        /* Campo da Tennis Retro */
-        .tennis-court {
-            width: 300px;
-            height: 2px;
-            background: var(--phosphor-dim);
-            margin: 20px auto;
-            position: relative;
-        }
-        
-        .net {
-            position: absolute;
-            left: 50%;
-            top: -10px;
-            height: 20px;
-            width: 2px;
-            background: var(--phosphor-main);
+        /* IL CAMPO DA GIOCO */
+        #gameCanvas {
+            border: 4px solid var(--phosphor-main);
+            box-shadow: 0 0 25px var(--phosphor-dim); /* Alone più intenso */
+            background-color: #000;
+            cursor: none;
+            /* Dimensioni fisse per mantenere l'aspetto retro */
+            width: 800px;
+            height: 500px;
+            /* Adattamento per schermi piccoli se necessario */
+            max-width: 95vw;
+            max-height: 65vh;
         }
 
-        .ball {
-            width: 10px;
-            height: 10px;
-            background: var(--phosphor-main);
-            border-radius: 50%;
-            position: absolute;
-            top: -4px;
-            animation: bounce 2s infinite ease-in-out;
-        }
-
-        @keyframes bounce {
-            0% { left: 0; }
-            50% { left: 100%; }
-            100% { left: 0; }
-        }
-
-        /* --- LIVELLI DI GIOCO --- */
-        .level-card {
-            border: 2px solid var(--phosphor-main);
-            padding: 20px;
-            margin-bottom: 20px;
-            background: rgba(0, 20, 0, 0.8);
-            box-shadow: 0 0 15px rgba(51, 255, 0, 0.2);
-            display: none; /* Nascosti di default */
-            opacity: 0;
-            transition: opacity 0.5s ease-in;
-        }
-
-        .level-card.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .level-title {
-            font-size: 2rem;
-            margin-top: 0;
-            border-bottom: 1px dashed var(--phosphor-dim);
-            padding-bottom: 10px;
-        }
-
-        .instruction {
-            font-size: 1.3rem;
-            line-height: 1.4;
-            margin: 20px 0;
-        }
-
-        .highlight-box {
-            background-color: #002200;
-            border: 1px solid var(--phosphor-dim);
-            padding: 15px;
-            font-family: monospace;
-            color: #fff;
+        /* UI HUD (Punteggio) */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            max-width: 95vw;
             margin: 10px 0;
-            white-space: pre-wrap;
+            font-size: 1.8rem;
+            z-index: 5;
         }
 
-        /* Input e Bottoni */
-        textarea, input[type="text"] {
-            width: 100%;
-            background: #000;
-            border: 2px solid var(--phosphor-main);
-            color: var(--phosphor-main);
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
+        /* MODALI / CLINIC (Overlay sopra il gioco) */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay-bg);
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        textarea:focus, input:focus {
-            outline: none;
-            box-shadow: 0 0 10px var(--phosphor-main);
+        .modal-content {
+            width: 90%;
+            max-width: 700px;
+            border: 3px solid var(--phosphor-main);
+            padding: 30px;
+            box-shadow: 0 0 35px var(--phosphor-dim) inset; /* Bagliore interno */
+            text-align: left;
+            position: relative;
+            background: rgba(0,0,0,0.8);
         }
 
-        button {
+        .hidden { display: none !important; }
+        h3 { margin-top: 0; text-transform: uppercase; text-align: center; font-size: 2.2rem;}
+        
+        .btn {
             background: var(--phosphor-main);
             color: #000;
             font-family: 'VT323', monospace;
@@ -171,300 +122,379 @@
             padding: 10px 30px;
             border: none;
             cursor: pointer;
-            text-transform: uppercase;
-            font-weight: bold;
-            display: block;
-            margin: 20px auto 0;
-        }
-
-        button:hover {
-            background: #fff;
-            box-shadow: 0 0 15px #fff;
-        }
-
-        /* Risposta Simulata Gemini */
-        .gemini-response {
             margin-top: 20px;
-            padding: 15px;
-            border-left: 4px solid var(--phosphor-main);
-            background: rgba(51, 255, 0, 0.05);
-            font-family: sans-serif; /* Per differenziare */
-            font-size: 1rem;
-            color: #ccffcc;
-            display: none;
-        }
-
-        /* Checkbox custom */
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
-        
-        .checklist-item input {
-            margin-right: 15px;
-            transform: scale(1.5);
-            accent-color: var(--phosphor-main);
-        }
-
-        /* Footer e Zally Images */
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 1rem;
-            color: var(--phosphor-dim);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .zally-mini {
-            height: 30px;
-            width: auto;
-            margin-right: 10px;
-            opacity: 0.8;
-        }
-
-        .zally-winner {
             display: block;
-            margin: 0 auto 20px auto;
-            max-width: 150px;
-            height: auto;
-        }
-
-        /* Animazione Typing */
-        .typing-cursor::after {
-            content: '▋';
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Success Message */
-        .success-message {
+            width: 100%;
             text-align: center;
-            font-size: 2rem;
-            color: #fff;
-            animation: pulse 1s infinite;
-            display: none;
-            margin-top: 30px;
-            border-top: 2px dashed var(--phosphor-main);
-            padding-top: 30px;
+            font-weight: bold;
+        }
+        .btn:hover { background: #ffaa55; box-shadow: 0 0 20px var(--phosphor-main); }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* Istruzioni nella schermata di avvio */
+        .controls-box {
+            border: 2px dashed var(--phosphor-dim);
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.4rem;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); text-shadow: 0 0 10px var(--phosphor-main); }
-            50% { transform: scale(1.05); text-shadow: 0 0 20px var(--phosphor-main); }
-            100% { transform: scale(1); text-shadow: 0 0 10px var(--phosphor-main); }
+        /* Elementi didattici */
+        .checklist-item { display: block; margin: 15px 0; font-size: 1.3rem; cursor: pointer; }
+        input[type="checkbox"] { margin-right: 10px; transform: scale(1.5); accent-color: var(--phosphor-main); }
+        
+        textarea {
+            width: 100%; background: #000; color: var(--phosphor-main);
+            border: 2px solid var(--phosphor-main); font-family: 'VT323', monospace;
+            font-size: 1.2rem; padding: 10px; margin-top: 10px;
+        }
+
+        /* Zally styling */
+        .zally-corner {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            height: 70px; /* Leggermente più grande */
+            opacity: 0.8;
+            z-index: 5;
+            filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2); /* Zally color ambra/arancio! */
+        }
+
+        .zally-win {
+            height: 150px; display: block; margin: 0 auto 20px auto;
+            animation: bounce 1s infinite;
+            filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2);
+        }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Typewriter effect container */
+        .gemini-reply {
+            margin-top: 15px; padding: 10px; border-left: 4px solid var(--phosphor-main);
+            font-family: sans-serif; font-size: 1rem; color: #ffeebb; min-height: 40px;
+            background: rgba(255, 120, 0, 0.1);
         }
 
     </style>
 </head>
 <body>
 
-    <div class="game-container">
-        
-        <!-- HEADER / INTRO -->
-        <header>
-            <h1>TENNIS FOR TWO</h1>
-            <div class="subtitle">Welcome to Gemini Clinic • YF&K Ops</div>
+    <!-- NUOVO HEADER CENTRALE -->
+    <header class="main-header">
+        <h1>WELCOME TO GEMINI</h1>
+        <h2>Zalando YF&K Ops Edition</h2>
+    </header>
+
+    <!-- HUD Punteggio -->
+    <div class="hud">
+        <div>PLAYER 1 (YOU)</div>
+        <div id="scoreBoard">0 - 0</div>
+        <div>CPU (GEMINI)</div>
+    </div>
+
+    <!-- CANVAS DI GIOCO (Larghezza e altezza fisse nel tag canvas, gestite poi via CSS) -->
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+    <!-- Zally Footer (Arbitro) -->
+    <img src="zally.png" alt="Zally Referee" class="zally-corner">
+
+    <!-- SCHERMATA INIZIALE + ISTRUZIONI -->
+    <div id="screen-start" class="modal-overlay">
+        <div class="modal-content">
+            <h3>TENNIS FOR TWO: THE MATCH</h3>
+            <p style="font-size: 1.3rem; text-align: center;">
+                L'IA non è magia, è un palleggio. Tu servi, lei risponde.
+                Dimostra di saper gestire lo scambio per sbloccare le funzionalità di Gemini.
+            </p>
             
-            <div class="tennis-court">
-                <div class="net"></div>
-                <div class="ball"></div>
+            <!-- Box Istruzioni in evidenza -->
+            <div class="controls-box">
+                <strong>ISTRUZIONI DI GIOCO:</strong><br>
+                Muovi il MOUSE su e giù per controllare la tua racchetta (SINISTRA).<br>
+                Fai punto contro Gemini per sbloccare i livelli successivi.
             </div>
 
-            <p style="font-size: 1.2rem;">
-                Anno 1958: Nasce il primo videogioco.<br>
-                Anno 2025: Nasce il tuo nuovo assistente.<br>
-                <strong>Gemini non è magia. È un palleggio. Impara a servire.</strong>
-            </p>
-        </header>
-
-        <!-- LEVEL 1: IL CAMPO DA GIOCO -->
-        <div id="level-1" class="level-card active">
-            <h2 class="level-title">SET 1: Scendi in Campo</h2>
-            <p class="instruction">
-                Non puoi giocare se non trovi il campo. Eliminiamo subito la barriera del "dove clicco?".
-            </p>
-            
-            <div style="margin: 20px 0;">
-                <label class="checklist-item">
-                    <input type="checkbox" id="check1" onchange="checkLevel1()">
-                    Ho trovato l'icona ✨ "Chiedi a Gemini" nel pannello laterale di G-Suite (Gmail/Docs).
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox" id="check2" onchange="checkLevel1()">
-                    Ho aperto <a href="https://gemini.google.com" target="_blank" style="color:white;">gemini.google.com</a> in una nuova scheda.
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox" id="check3" onchange="checkLevel1()">
-                    Ho salvato il link nei preferiti del browser.
-                </label>
-            </div>
-
-            <button id="btn-level-1" onclick="nextLevel(2)" style="display:none; opacity: 0.5;">READY TO SERVE</button>
+            <button class="btn" onclick="startGame()">START MATCH >></button>
         </div>
+    </div>
 
-        <!-- LEVEL 2: LA LINGUA (SERVIZIO) -->
-        <div id="level-2" class="level-card">
-            <h2 class="level-title">SET 2: Scegli il tuo Personaggio</h2>
-            <p class="instruction">
-                Molti in Ops pensano di dover scrivere prompt perfetti in Business English. 
-                <strong>Falso.</strong> Tu servi in Italiano, lui risponde in Inglese (o Tedesco).
-            </p>
-            <p class="instruction">
-                <strong>MISSIONE:</strong> Copia questo testo informale e incollalo nel box qui sotto per vedere come Gemini lo trasforma.
-            </p>
+    <!-- LIVELLO 1: PAUSA TRA I SET (Accesso) -->
+    <div id="screen-level1" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>⏸️ TIMEOUT: CONFIGURAZIONE</h3>
+            <p>Bel punto! Ma per giocare il vero match, devi sapere dove trovare il campo.</p>
             
-            <div class="highlight-box" id="copy-text">"Ciao, devo scrivere a un fornitore (Haddad) che la merce è in ritardo di 3 settimane per il Black Friday e siamo preoccupati. Scrivimela formale in Inglese per Zalando."</div>
-            
-            <textarea id="input-level-2" rows="4" placeholder="Incolla qui il tuo prompt (o scrivilo tu)..."></textarea>
-            
-            <button onclick="playLevel2()">EFFETTUA IL SERVIZIO</button>
-
-            <div id="response-level-2" class="gemini-response">
-                <strong>✨ Gemini:</strong><br>
-                <span id="type-level-2"></span>
+            <div class="checklist-item">
+                <label><input type="checkbox" id="chk1" onchange="validateLvl1()"> 1. Cerca la scintilla ✨ nel pannello laterale di Gmail/Docs.</label>
+            </div>
+            <div class="checklist-item">
+                <label><input type="checkbox" id="chk2" onchange="validateLvl1()"> 2. Apri <a href="https://gemini.google.com" target="_blank" style="color:var(--phosphor-main)">gemini.google.com</a> in un'altra scheda.</label>
+            </div>
+            <div class="checklist-item">
+                <label><input type="checkbox" id="chk3" onchange="validateLvl1()"> 3. Salvalo nei preferiti per averlo sempre pronto.</label>
             </div>
 
-            <button id="btn-level-2" onclick="nextLevel(3)" style="display:none; margin-top:20px;">VAI AL PALLEGGIO >></button>
+            <button id="btn-lvl1" class="btn" disabled onclick="resumeGame(2)">SCENDI IN CAMPO (SET 2)</button>
         </div>
+    </div>
 
-        <!-- LEVEL 3: L'ITERAZIONE (PALLEGGIO) -->
-        <div id="level-3" class="level-card">
-            <h2 class="level-title">SET 3: Il Palleggio</h2>
-            <p class="instruction">
-                A tennis non si tira una pallina e basta. Si risponde al colpo.
-                <strong>Regola d'oro:</strong> Mai fermarsi alla prima risposta. Chiedi una modifica.
-            </p>
-            <p class="instruction">
-                <strong>MISSIONE:</strong> La mail di prima era buona, ma troppo lunga. Fai un "Tiro al Volo" (Reply).
-            </p>
-
-            <div class="highlight-box">Esempio Prompt: "È troppo lunga. Rendila più concisa e aggiungi una tabella con: PO Number, Delay Weeks, New ETA."</div>
-
-            <textarea id="input-level-3" rows="3" placeholder="Chiedi a Gemini una modifica..."></textarea>
+    <!-- LIVELLO 2: PAUSA (Lingua) -->
+    <div id="screen-level2" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>⏸️ TIMEOUT: STRATEGIA LINGUISTICA</h3>
+            <p>Gemini è poliglotta. Non sprecare tempo a tradurre mentalmente. Servi in Italiano, chiedi output in Inglese.</p>
             
-            <button onclick="playLevel3()">TIRO AL VOLO</button>
-
-            <div id="response-level-3" class="gemini-response">
-                <strong>✨ Gemini:</strong><br>
-                <span id="type-level-3"></span>
-            </div>
-
-            <div id="final-win" class="success-message">
-                <!-- Zally appare qui alla vittoria -->
-                <img src="zally.png" alt="Zally Mascot" class="zally-winner">
-                🏆 MATCH POINT VINTO! <br>
-                <span style="font-size: 1rem; color: var(--phosphor-dim)">Sei ufficialmente pronto per la YF&K AI Challenge.</span>
-            </div>
+            <p><strong>CHALLENGE:</strong> Copia questo testo "grezzo" e incollalo qui sotto per vedere come Gemini lo pulisce.</p>
+            <div style="background:rgba(255, 100, 0, 0.1); border: 1px dashed var(--phosphor-dim); padding:10px; font-style:italic;">"Ciao team Haddad, la merce PO-12345 è in ritardo di 3 settimane per il Black Friday. Siamo preoccupati. Aggiornateci urgentemente."</div>
+            
+            <textarea id="prompt-lvl2" rows="3" placeholder="Incolla qui il testo per il servizio..."></textarea>
+            <button class="btn" onclick="runGeminiSim1()">INVIA A GEMINI</button>
+            
+            <div id="reply-lvl2" class="gemini-reply hidden"></div>
+            <button id="btn-lvl2" class="btn hidden" onclick="resumeGame(3)">OTTIMO! VAI AL SET FINALE</button>
         </div>
+    </div>
 
-        <footer>
-            <!-- Zally mini nel footer -->
-            <img src="zally.png" alt="Zally Mini" class="zally-mini">
-            Created for YF&K Ops Team • Gemini Champion Program
-        </footer>
-
+    <!-- VITTORIA -->
+    <div id="screen-win" class="modal-overlay hidden">
+        <div class="modal-content" style="text-align: center;">
+            <img src="zally.png" alt="Zally Winner" class="zally-win">
+            <h3>🏆 MATCH POINT VINTO! 🏆</h3>
+            <p style="font-size: 1.5rem;">Hai completato la Clinic "Welcome to Gemini".</p>
+            <p>Ora hai le basi: sai dove trovarlo e sai che puoi parlargli come a un collega.</p>
+            <p style="color: var(--phosphor-dim)">Prossima sfida: Gemini in Gmail!</p>
+            <button class="btn" onclick="location.reload()">RIGIOCA PARTITA</button>
+        </div>
     </div>
 
     <script>
-        // LOGICA DI GIOCO
+        // --- GAME ENGINE ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game State
+        let gameRunning = false;
+        let playerScore = 0;
+        let cpuScore = 0;
+        let currentLevel = 1; 
 
-        // LEVEL 1
-        function checkLevel1() {
-            const c1 = document.getElementById('check1').checked;
-            const c2 = document.getElementById('check2').checked;
-            const c3 = document.getElementById('check3').checked;
-            const btn = document.getElementById('btn-level-1');
+        // Objects (using canvas dimensions variables for responsiveness later if needed)
+        const CW = canvas.width;
+        const CH = canvas.height;
 
+        const ball = { x: CW/2, y: CH/2, dx: 6, dy: 6, radius: 7 };
+        const player = { x: 15, y: CH/2 - 40, width: 12, height: 80, dy: 0 };
+        const cpu = { x: CW - 27, y: CH/2 - 40, width: 12, height: 80, speed: 4.5 };
+
+        // Mouse Control
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            
+            // Calcolo della posizione Y relativa al canvas, tenendo conto del CSS scaling
+            const scaleY = canvas.height / rect.height;
+            const mouseY = (e.clientY - rect.top) * scaleY;
+            
+            player.y = mouseY - (player.height/2);
+            
+            // Limiti Paddle Giocatore
+            if(player.y < 0) player.y = 0;
+            if(player.y + player.height > CH) player.y = CH - player.height;
+        });
+
+        function resetBall() {
+            ball.x = CW / 2;
+            ball.y = CH / 2;
+            ball.dx = -ball.dx; 
+            ball.dy = (Math.random() * 10) - 5; 
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            // Move Ball
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Bounce Top/Bottom
+            if (ball.y + ball.radius > CH || ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
+            }
+
+            // Paddle Collision Player
+            if (ball.x - ball.radius < player.x + player.width && 
+                ball.y > player.y && ball.y < player.y + player.height) {
+                ball.dx = Math.abs(ball.dx); // Force direction right
+                let deltaY = ball.y - (player.y + player.height / 2);
+                ball.dy = deltaY * 0.25;
+                increaseSpeed();
+            }
+
+            // Paddle Collision CPU
+            if (ball.x + ball.radius > cpu.x && 
+                ball.y > cpu.y && ball.y < cpu.y + cpu.height) {
+                ball.dx = -Math.abs(ball.dx); // Force direction left
+                increaseSpeed();
+            }
+
+            // CPU AI
+            let cpuTargetY = ball.y - (cpu.height/2);
+            // Aggiunge un piccolo errore/ritardo alla CPU per renderla battibile
+            if(ball.dx < 0) cpuTargetY = CH/2 - (cpu.height/2); // Se la palla si allontana, torna al centro
+
+            if (cpu.y < cpuTargetY - cpu.speed) {
+                cpu.y += cpu.speed;
+            } else if (cpu.y > cpuTargetY + cpu.speed) {
+                cpu.y -= cpu.speed;
+            }
+             // Limiti Paddle CPU
+             if(cpu.y < 0) cpu.y = 0;
+             if(cpu.y + cpu.height > CH) cpu.y = CH - cpu.height;
+
+
+            // Score Logic
+            if (ball.x < 0) {
+                cpuScore++;
+                checkScoreTrigger();
+                resetBall();
+            } else if (ball.x > CW) {
+                playerScore++;
+                checkScoreTrigger();
+                resetBall();
+            }
+
+            updateScoreboard();
+        }
+
+        function increaseSpeed() {
+            if(Math.abs(ball.dx) < 15) {
+                ball.dx *= 1.05;
+            }
+        }
+
+        // Recupera il colore arancione dal CSS per usarlo nel canvas
+        const phosphorColor = getComputedStyle(document.documentElement).getPropertyValue('--phosphor-main').trim();
+        const phosphorDim = getComputedStyle(document.documentElement).getPropertyValue('--phosphor-dim').trim();
+
+        function draw() {
+            // Clear screen
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, CW, CH);
+
+            // Draw Net
+            ctx.strokeStyle = phosphorDim;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 15]);
+            ctx.beginPath();
+            ctx.moveTo(CW / 2, 0);
+            ctx.lineTo(CW / 2, CH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Ball (con effetto scia/alone)
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = phosphorColor;
+            ctx.fillStyle = phosphorColor;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Paddles
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillRect(cpu.x, cpu.y, cpu.width, cpu.height);
+            
+            // Reset shadow per il prossimo frame
+            ctx.shadowBlur = 0;
+
+            if (gameRunning) {
+                requestAnimationFrame(() => {
+                    update();
+                    draw();
+                });
+            }
+        }
+
+        function updateScoreboard() {
+            document.getElementById('scoreBoard').innerText = `${playerScore} - ${cpuScore}`;
+        }
+
+        // --- GAME LOGIC & TRIGGERS ---
+
+        function checkScoreTrigger() {
+            // TRIGGER LIVELLO 1: Al primo punto fatto dal giocatore
+            if (currentLevel === 1 && playerScore >= 1) {
+                pauseGame();
+                setTimeout(() => {
+                     document.getElementById('screen-level1').classList.remove('hidden');
+                }, 500); // Piccolo ritardo per godersi il punto
+            }
+            // TRIGGER LIVELLO 2: A 3 punti del giocatore
+            else if (currentLevel === 2 && playerScore >= 3) {
+                pauseGame();
+                 setTimeout(() => {
+                    document.getElementById('screen-level2').classList.remove('hidden');
+                 }, 500);
+            }
+            // WIN CONDITION: A 5 punti del giocatore
+            else if (playerScore >= 5) {
+                pauseGame();
+                 setTimeout(() => {
+                    document.getElementById('screen-win').classList.remove('hidden');
+                 }, 500);
+            }
+        }
+
+        function startGame() {
+            document.getElementById('screen-start').classList.add('hidden');
+            gameRunning = true;
+            // Inizializza il disegno per assicurarsi che i colori CSS siano caricati
+            draw();
+        }
+
+        function pauseGame() {
+            gameRunning = false;
+        }
+
+        function resumeGame(nextLevelIndex) {
+            currentLevel = nextLevelIndex;
+            // Nascondi tutti i modali
+            document.querySelectorAll('.modal-overlay').forEach(el => el.classList.add('hidden'));
+            gameRunning = true;
+            resetBall();
+            draw();
+        }
+
+        // --- CLINIC LOGIC (Interaction) ---
+
+        // Level 1 Validation
+        function validateLvl1() {
+            const c1 = document.getElementById('chk1').checked;
+            const c2 = document.getElementById('chk2').checked;
+            const c3 = document.getElementById('chk3').checked;
+            const btn = document.getElementById('btn-lvl1');
+            
             if(c1 && c2 && c3) {
-                btn.style.display = 'block';
-                btn.style.opacity = '1';
-                // Piccola animazione
-                btn.innerText = "SBLOCCA LIVELLO 2";
+                btn.disabled = false;
+                btn.innerText = "ACCESSO COMPLETATO - RIPRENDI GIOCO >>";
             }
         }
 
-        function nextLevel(levelNum) {
-            // Nasconde livello corrente
-            const current = document.querySelector('.level-card.active');
-            current.classList.remove('active');
+        // Level 2 Simulation
+        function runGeminiSim1() {
+            const input = document.getElementById('prompt-lvl2').value;
+            if (input.length < 5) { alert("Devi incollare il testo per servire!"); return; }
             
-            // Mostra nuovo livello
-            const next = document.getElementById('level-' + levelNum);
-            next.style.display = 'block';
-            // Timeout per permettere la transizione CSS
+            const replyBox = document.getElementById('reply-lvl2');
+            replyBox.classList.remove('hidden');
+            replyBox.innerHTML = "Generating...";
+            
             setTimeout(() => {
-                next.classList.add('active');
-            }, 100);
-            
-            // Scroll automatico
-            next.scrollIntoView({ behavior: 'smooth' });
+                replyBox.innerHTML = "<strong>Subject:</strong> Urgent Update: PO-12345 Delay (Black Friday)<br><br>Dear Haddad Team,<br>We are writing to urgently address a critical delay with PO-12345 (3 weeks late). As this stock is essential for our Black Friday campaign, please provide an immediate status update and revised ETA.<br><br>Best regards,<br>Zalando YF&K Ops";
+                document.getElementById('btn-lvl2').classList.remove('hidden');
+            }, 1500);
         }
-
-        // TYPEWRITER EFFECT SIMULATION
-        function typeWriter(elementId, text, speed, callback) {
-            let i = 0;
-            document.getElementById(elementId).innerHTML = "";
-            document.getElementById(elementId).classList.add('typing-cursor');
-            
-            function type() {
-                if (i < text.length) {
-                    document.getElementById(elementId).innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    document.getElementById(elementId).classList.remove('typing-cursor');
-                    if(callback) callback();
-                }
-            }
-            type();
-        }
-
-        // LEVEL 2
-        function playLevel2() {
-            const input = document.getElementById('input-level-2').value;
-            if(input.length < 5) {
-                alert("Devi tirare la palla! Incolla il prompt nel box.");
-                return;
-            }
-
-            const responseBox = document.getElementById('response-level-2');
-            responseBox.style.display = 'block';
-            
-            const fakeGeminiResponse = "Dear Haddad Team, \n\nI hope this email finds you well. \n\nWe are reaching out regarding the upcoming Black Friday deliveries. We have noticed a potential delay of approximately 3 weeks for the goods, which is concerning for our campaign planning. \n\nCould you please provide an urgent update on the shipment status? \n\nBest regards,\n[Your Name] - Zalando YF&K Ops";
-
-            typeWriter('type-level-2', fakeGeminiResponse, 15, () => {
-                document.getElementById('btn-level-2').style.display = 'block';
-            });
-        }
-
-        // LEVEL 3
-        function playLevel3() {
-            const input = document.getElementById('input-level-3').value;
-            if(input.length < 3) {
-                alert("Non mollare ora! Chiedi una modifica.");
-                return;
-            }
-
-            const responseBox = document.getElementById('response-level-3');
-            responseBox.style.display = 'block';
-
-            const fakeGeminiResponseV2 = "Subject: Urgent: Delay Update - Black Friday\n\nDear Haddad Team,\n\nPlease see the affected orders below. We require an urgent update on the new ETA.\n\n| PO Number | Delay | New ETA |\n|-----------|-------|---------|\n| 4500123   | 3 Wks | TBC     |\n\nBest,\n[Your Name]";
-
-            typeWriter('type-level-3', fakeGeminiResponseV2, 15, () => {
-                document.getElementById('final-win').style.display = 'block';
-                // Party effect (semplice cambio colore bordo)
-                document.getElementById('level-3').style.borderColor = '#fff';
-            });
-        }
+        
+        // Disegna una prima volta staticamente all'avvio per mostrare il campo
+        draw();
 
     </script>
 </body>
