@@ -165,7 +165,8 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
         }
         .lang-btn {
             background: #000;
@@ -174,11 +175,19 @@
             padding: 5px 10px;
             cursor: pointer;
             font-family: 'VT323', monospace;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            margin-bottom: 5px;
         }
-        .lang-btn:hover, .lang-btn.active {
+        .lang-btn:hover {
             background: var(--phosphor-main);
             color: #000;
+        }
+        .lang-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--phosphor-dim);
+            margin-bottom: 10px;
+            font-style: italic;
         }
 
         /* Images */
@@ -199,7 +208,6 @@
         
         .gemini-icon-inline {
             height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
-            /* Filter to match the orange theme */
             filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
@@ -222,6 +230,9 @@
             margin-right: 10px;
             vertical-align: middle;
         }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
 
     </style>
 </head>
@@ -295,19 +306,21 @@
         <div class="modal-content">
             <h3>⏸️ PHASE 2: THE RETURN (Language)</h3>
             <p>Gemini speaks <strong>over 40 languages</strong>. You don't need perfect English.</p>
-            
-            <p><strong>CHALLENGE:</strong> Select a language to get a sample text, OR paste your own text below.</p>
+            <p><strong>CHALLENGE:</strong> Paste a text in <strong>ANY language</strong> you want (even a mix!) and ask Gemini to "Polish for Business English".</p>
             
             <!-- Language Selector -->
             <div class="lang-btn-container">
-                <button class="lang-btn" onclick="setText('DE')">🇩🇪 German</button>
-                <button class="lang-btn" onclick="setText('FR')">🇫🇷 French</button>
-                <button class="lang-btn" onclick="setText('IT')">🇮🇹 Italian</button>
-                <button class="lang-btn" onclick="setText('ES')">🇪🇸 Spanish</button>
+                <button class="lang-btn" onclick="setText('DE')">🇩🇪 DE</button>
+                <button class="lang-btn" onclick="setText('FR')">🇫🇷 FR</button>
+                <button class="lang-btn" onclick="setText('IT')">🇮🇹 IT</button>
+                <button class="lang-btn" onclick="setText('ES')">🇪🇸 ES</button>
+                <button class="lang-btn" onclick="setText('PT')">🇵🇹 PT</button>
+                <button class="lang-btn" onclick="setText('JP')">🇯🇵 JP</button>
+                <button class="lang-btn" onclick="setText('IN')">🇮🇳 IN</button>
             </div>
+            <div class="lang-note">(Languages shown are examples of what Gemini can handle)</div>
 
-            <!-- Added an ID to the textarea to track value -->
-            <textarea id="prompt-lvl2" rows="3" placeholder="Paste the text here and ask: 'Rewrite this for a supplier in English'..."></textarea>
+            <textarea id="prompt-lvl2" rows="3" placeholder="Paste the text here..."></textarea>
             <button class="btn" onclick="runGeminiSim1()">SERVE PROMPT</button>
             
             <div id="reply-lvl2" class="gemini-reply hidden"></div>
@@ -315,17 +328,21 @@
         </div>
     </div>
 
-    <!-- LEVEL 3: ITERATE & REITERATE -->
+    <!-- LEVEL 3: CREATIVITY / MULTIMODAL -->
     <div id="screen-level3" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3>⏸️ PHASE 3: ITERATE & REITERATE</h3>
-            <p><span class="info-pill">THE SECRET SAUCE</span></p>
-            <p>A good rally doesn't end after one hit. <strong>Never settle for the first answer.</strong></p>
-            <p>The real value comes when you tell Gemini to adjust, shorten, or change tone. This is the <strong>Reiterate</strong> phase.</p>
+            <h3>⏸️ PHASE 3: THE CREATIVE SHOT</h3>
+            <p><span class="info-pill">GEMINI IS MULTIMODAL</span></p>
+            <p>Gemini isn't just about text. It helps you create content.</p>
+            <ul>
+                <li><strong>Veo:</strong> Generate high-quality videos for your presentations.</li>
+                <li><strong>Nano Banana:</strong> Use it for quick creative brainstorming.</li>
+                <li><strong>Image Generation:</strong> Create visuals for slides or mockups.</li>
+            </ul>
             
-            <p><strong>CHALLENGE:</strong> The previous output was good, but maybe too long. Ask Gemini to refine it.</p>
-            <textarea id="prompt-lvl3" rows="2" placeholder="E.g., 'Make it shorter' or 'Make it more polite'..."></textarea>
-            <button class="btn" onclick="runGeminiSim2()">REITERATE</button>
+            <p><strong>CHALLENGE:</strong> Ask Gemini to create an image for your "Black Friday" campaign.</p>
+            <textarea id="prompt-lvl3" rows="2" placeholder="E.g., 'Generate an image of a futuristic neon sneaker for Black Friday'..."></textarea>
+            <button class="btn" onclick="runGeminiSim2()">GENERATE IMAGE</button>
 
             <div id="reply-lvl3" class="gemini-reply hidden"></div>
             <button id="btn-lvl3" class="btn hidden" onclick="triggerWin()">WIN MATCH POINT</button>
@@ -337,9 +354,9 @@
         <div class="modal-content" style="text-align: center;">
             <img src="zally.png" alt="Zally Winner" class="zally-win">
             <h3>🏆 MATCH WON! 🏆</h3>
-            <h2 style="color:#fff; border-bottom: none;">SERVE • RETURN • ITERATE • REITERATE</h2>
             <p style="font-size: 1.4rem;">You are now ready to start your Gemini journey.</p>
-            <p>Remember: It's not just a tool, it's a teammate.</p>
+            <p>Remember the golden rule:</p>
+            <h2 style="color:#fff; border-bottom: none; font-size: 2.5rem; margin-top:10px;">SERVE • RETURN • ITERATE • REITERATE</h2>
             <button class="btn" onclick="location.reload()">PLAY AGAIN</button>
         </div>
     </div>
@@ -356,29 +373,23 @@
         let currentLevel = 1; 
         
         // Input State
-        const keys = {
-            ArrowUp: false,
-            ArrowDown: false
-        };
+        const keys = { ArrowUp: false, ArrowDown: false };
 
         // Canvas Dimensions
         const CW = canvas.width;
         const CH = canvas.height;
 
-        // --- ADJUSTED SETTINGS (KEYBOARD + EASIER AI + SMALLER PADDLES) ---
+        // --- SETTINGS: KEYBOARD + EASY AI + SMALL PADDLES ---
         const ball = { x: CW/2, y: CH/2, dx: 3.5, dy: 3.5, radius: 8 };
-        
-        // Player: Reduced height
+        // Player: Reduced height (~105px)
         const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 6, dy: 0 };
-        
-        // CPU: Reduced height, slower speed
+        // CPU: Slower speed (2.5)
         const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.5 };
 
         // KEYBOARD CONTROLS
         window.addEventListener('keydown', (e) => {
             if(keys.hasOwnProperty(e.code)) keys[e.code] = true;
         });
-        
         window.addEventListener('keyup', (e) => {
             if(keys.hasOwnProperty(e.code)) keys[e.code] = false;
         });
@@ -393,44 +404,35 @@
         function update() {
             if (!gameRunning) return;
 
-            // Move Player (Keyboard)
-            if (keys.ArrowUp && player.y > 0) {
-                player.y -= player.speed;
-            }
-            if (keys.ArrowDown && player.y + player.height < CH) {
-                player.y += player.speed;
-            }
+            // Move Player
+            if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+            if (keys.ArrowDown && player.y + player.height < CH) player.y += player.speed;
 
             // Move Ball
             ball.x += ball.dx;
             ball.y += ball.dy;
 
             // Bounce Top/Bottom
-            if (ball.y + ball.radius > CH || ball.y - ball.radius < 0) {
-                ball.dy = -ball.dy;
-            }
+            if (ball.y + ball.radius > CH || ball.y - ball.radius < 0) ball.dy = -ball.dy;
 
-            // Paddle Collision Player
+            // Collisions
             if (ball.x - ball.radius < player.x + player.width && 
                 ball.y > player.y && ball.y < player.y + player.height) {
                 ball.dx = Math.abs(ball.dx); 
                 let deltaY = ball.y - (player.y + player.height / 2);
                 ball.dy = deltaY * 0.15; 
             }
-
-            // Paddle Collision CPU
             if (ball.x + ball.radius > cpu.x && 
                 ball.y > cpu.y && ball.y < cpu.y + cpu.height) {
                 ball.dx = -Math.abs(ball.dx);
             }
 
-            // CPU AI (EASIER LOGIC)
+            // CPU AI (Easy)
             if (ball.x > CW / 2) {
                 let cpuTargetY = ball.y - (cpu.height/2);
                 if (cpu.y < cpuTargetY - cpu.speed) cpu.y += cpu.speed;
                 else if (cpu.y > cpuTargetY + cpu.speed) cpu.y -= cpu.speed;
             }
-            
             if(cpu.y < 0) cpu.y = 0;
             if(cpu.y + cpu.height > CH) cpu.y = CH - cpu.height;
 
@@ -488,8 +490,6 @@
         function updateScoreboard() {
             document.getElementById('scoreBoard').innerText = `${playerScore} - ${cpuScore}`;
         }
-
-        // --- GAMEFLOW LOGIC ---
 
         function checkScoreTrigger() {
             if (currentLevel === 1 && playerScore >= 1) {
@@ -549,10 +549,13 @@
         // Level 2 (Universal Translation Helper)
         function setText(lang) {
             const area = document.getElementById('prompt-lvl2');
-            if(lang === 'DE') area.value = 'Hallo Team, die Ware (PO-12345) kommt 3 Wochen zu spät. Wir machen uns Sorgen wegen Black Friday. Bitte um Update.';
-            if(lang === 'FR') area.value = 'Bonjour, la commande PO-12345 a 3 semaines de retard. C\'est critique pour le Black Friday. Merci de nous tenir informés.';
-            if(lang === 'IT') area.value = 'Ciao team, la merce PO-12345 è in ritardo di 3 settimane per il Black Friday. Siamo preoccupati. Aggiornateci.';
-            if(lang === 'ES') area.value = 'Hola equipo, el pedido PO-12345 tiene un retraso de 3 semanas. Estamos preocupados por el Black Friday. Por favor, actualizadnos.';
+            if(lang === 'DE') area.value = 'Hallo Partner, die PO-Bestätigung für die Black Friday-Woche ist überfällig. Schickt sie sofort, wir brauchen auch die AMDs, schnell!';
+            if(lang === 'FR') area.value = 'Salut Partenaire, la confirmation des PO pour la semaine du Black Friday est en retard, envoyez-la tout de suite, on a aussi besoin des AMD, vite !';
+            if(lang === 'IT') area.value = 'Ciao Partner, la conferma dei PO per la settiamana del Black Friday è in ritardo, mandatela subito inoltre abbiamo bisogno anche dei AMD, veloci!';
+            if(lang === 'ES') area.value = 'Hola Socio, la confirmación de las PO para la semana del Black Friday llega tarde, enviadla ya, también necesitamos los AMD, ¡rápido!';
+            if(lang === 'PT') area.value = 'Olá Parceiro, a confirmação dos POs para a semana da Black Friday está atrasada, enviem já, também precisamos dos AMDs, rápido!';
+            if(lang === 'JP') area.value = 'パートナーの皆さん、ブラックフライデー週のPO確認が遅れています。至急送ってください。AMDも必要です。急いで！';
+            if(lang === 'IN') area.value = 'नमस्ते पार्टनर, ब्लैक फ्राइडे सप्ताह के लिए PO की पुष्टि में देरी हो रही है, इसे तुरंत भेजें, हमें AMD की भी आवश्यकता है, जल्दी करें!';
         }
 
         function runGeminiSim1() {
@@ -563,33 +566,30 @@
             replyBox.classList.remove('hidden');
             replyBox.innerHTML = "✨ Detecting language... Translating... Polishing...";
             
-            // Check if user is using the challenge context (PO/Delivery/Delay)
-            // Keywords found in the sample texts
-            const isChallengeText = input.includes("po-12345") || input.includes("12345") || input.includes("black friday") || input.includes("ritardo") || input.includes("retard") || input.includes("delay");
+            // Check context
+            const isChallengeText = input.includes("po") || input.includes("black friday") || input.includes("ritardo") || input.includes("amd") || input.includes("partner");
 
             setTimeout(() => {
                 if (isChallengeText) {
-                    // Standard Challenge Response
-                    replyBox.innerHTML = "<strong>Subject:</strong> Urgent: PO-12345 Delay Update<br><br>Dear Partner,<br>We noticed a 3-week delay on PO-12345. As this is critical for our Black Friday strategy, please provide an urgent status update.<br>Best,<br>Zalando Team";
+                    replyBox.innerHTML = "<strong>Subject:</strong> Urgent: Black Friday PO Confirmation & AMDs<br><br>Dear Partner,<br>We noticed the PO confirmation for the Black Friday week is pending. Could you please send it urgently?<br>Additionally, we require the AMDs as soon as possible.<br>Best regards,<br>Zalando Team";
                 } else {
-                    // "Random Input" Handling - Acknowledge and redirect
-                    replyBox.innerHTML = "✨ <strong>Gemini:</strong> I see you typed custom text! In the real tool, I would translate exactly that.<br><br>For this <strong>Simulation</strong>, let me show you how I handle the <em>Business Case</em> from the challenge:<br><br><strong>Subject:</strong> Urgent: PO-12345 Delay Update<br>Dear Partner, We noticed a 3-week delay... [Standard Output Generated]";
+                    replyBox.innerHTML = "✨ <strong>Gemini:</strong> I see you typed custom text! In the real tool, I would translate exactly that.<br><br>For this <strong>Simulation</strong>, let me show you how I handle the <em>Black Friday Case</em>:<br><br><strong>Subject:</strong> Urgent: Black Friday PO Confirmation... [Standard Output Generated]";
                 }
                 document.getElementById('btn-lvl2').classList.remove('hidden');
             }, 2000);
         }
 
-        // Level 3 (Iterate)
+        // Level 3 (Creativity)
         function runGeminiSim2() {
             const input = document.getElementById('prompt-lvl3').value;
             if (input.length < 3) { alert("Please enter a prompt!"); return; }
             
             const replyBox = document.getElementById('reply-lvl3');
             replyBox.classList.remove('hidden');
-            replyBox.innerHTML = "✨ Re-iterating...";
+            replyBox.innerHTML = "✨ Generating Image...";
             
             setTimeout(() => {
-                replyBox.innerHTML = "<strong>Subject:</strong> PO-12345: Urgent Delay Check<br><br>Hi Team,<br>PO-12345 is 3 weeks late. This is a Black Friday blocker. Please advise ETA ASAP.<br>Thanks.";
+                replyBox.innerHTML = "<strong>[Image Generated]:</strong><br>A sleek, futuristic sneaker glowing in neon orange with 'Black Friday' glitch art in the background.<br><br><em>(Gemini can create images for your slides instantly!)</em>";
                 document.getElementById('btn-lvl3').classList.remove('hidden');
             }, 1500);
         }
