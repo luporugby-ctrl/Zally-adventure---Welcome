@@ -160,6 +160,27 @@
             font-size: 1.2rem; padding: 10px; margin-top: 10px; box-sizing: border-box;
         }
 
+        /* Language Buttons */
+        .lang-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .lang-btn {
+            background: #000;
+            border: 1px solid var(--phosphor-main);
+            color: var(--phosphor-main);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+        }
+        .lang-btn:hover, .lang-btn.active {
+            background: var(--phosphor-main);
+            color: #000;
+        }
+
         /* Images */
         .zally-corner {
             position: fixed;
@@ -177,7 +198,8 @@
         }
         
         .gemini-icon-inline {
-            height: 20px; width: auto; vertical-align: middle; margin-right: 5px;
+            height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
+            /* Filter to match the orange theme */
             filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
@@ -208,9 +230,9 @@
     <!-- HEADER -->
     <header class="main-header">
         <h1>
-            <img src="image_e01515.png" alt="" class="gemini-logo-header">
+            <img src="image_394515.png" alt="" class="gemini-logo-header">
             WELCOME TO GEMINI
-            <img src="image_e01515.png" alt="" class="gemini-logo-header">
+            <img src="image_394515.png" alt="" class="gemini-logo-header">
         </h1>
         <h2>SERVE • RETURN • ITERATE • REITERATE</h2>
     </header>
@@ -240,7 +262,7 @@
             <div class="controls-box">
                 <strong>HOW TO PLAY:</strong><br>
                 Use <strong>UP / DOWN ARROWS</strong> on your keyboard to move.<br>
-                Score 1 point to unlock the next Gemini Lesson.
+                Score 1 point to unlock the next <strong>Enablement Stage</strong>.
             </div>
 
             <button class="btn" onclick="startGame()">START MATCH >></button>
@@ -255,7 +277,7 @@
             <p><strong>Did you know?</strong> Gemini is seamlessly integrated into your daily tools.</p>
             
             <div class="checklist-item">
-                <label><input type="checkbox" id="chk1" onchange="validateLvl1()"> 1. Check Gmail/Docs side panel for the Gemini symbol <img src="image_e01515.png" class="gemini-icon-inline">.</label>
+                <label><input type="checkbox" id="chk1" onchange="validateLvl1()"> 1. Check Gmail/Docs side panel for the Gemini symbol <img src="image_394515.png" class="gemini-icon-inline">.</label>
             </div>
             <div class="checklist-item">
                 <label><input type="checkbox" id="chk2" onchange="validateLvl1()"> 2. Open <a href="https://gemini.google.com" target="_blank" style="color:var(--phosphor-main)">gemini.google.com</a> in a new tab.</label>
@@ -272,11 +294,20 @@
     <div id="screen-level2" class="modal-overlay hidden">
         <div class="modal-content">
             <h3>⏸️ PHASE 2: THE RETURN (Language)</h3>
-            <p>Gemini speaks <strong>over 40 languages</strong> (from French to Japanese). You don't need perfect English.</p>
+            <p>Gemini speaks <strong>over 40 languages</strong>. You don't need perfect English.</p>
             
-            <p><strong>CHALLENGE:</strong> Paste a text in <strong>ANY language</strong> you want (your native language, a dialect, or just test it) and ask Gemini to "Polish for Business English".</p>
+            <p><strong>CHALLENGE:</strong> Select a language to get a sample text, OR paste your own text below.</p>
             
-            <textarea id="prompt-lvl2" rows="3" placeholder="Paste your text here (e.g. in Italian, German, Spanish...)"></textarea>
+            <!-- Language Selector -->
+            <div class="lang-btn-container">
+                <button class="lang-btn" onclick="setText('DE')">🇩🇪 German</button>
+                <button class="lang-btn" onclick="setText('FR')">🇫🇷 French</button>
+                <button class="lang-btn" onclick="setText('IT')">🇮🇹 Italian</button>
+                <button class="lang-btn" onclick="setText('ES')">🇪🇸 Spanish</button>
+            </div>
+
+            <!-- Added an ID to the textarea to track value -->
+            <textarea id="prompt-lvl2" rows="3" placeholder="Paste the text here and ask: 'Rewrite this for a supplier in English'..."></textarea>
             <button class="btn" onclick="runGeminiSim1()">SERVE PROMPT</button>
             
             <div id="reply-lvl2" class="gemini-reply hidden"></div>
@@ -337,10 +368,10 @@
         // --- ADJUSTED SETTINGS (KEYBOARD + EASIER AI + SMALLER PADDLES) ---
         const ball = { x: CW/2, y: CH/2, dx: 3.5, dy: 3.5, radius: 8 };
         
-        // Player: Reduced height (150px -> ~105px), Speed for keyboard
+        // Player: Reduced height
         const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 6, dy: 0 };
         
-        // CPU: Reduced height, slower speed (3.0 -> 2.5) for easier win
+        // CPU: Reduced height, slower speed
         const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.5 };
 
         // KEYBOARD CONTROLS
@@ -394,14 +425,12 @@
             }
 
             // CPU AI (EASIER LOGIC)
-            // AI only reacts if ball is on its half (x > CW/2) to make it beatable
             if (ball.x > CW / 2) {
                 let cpuTargetY = ball.y - (cpu.height/2);
                 if (cpu.y < cpuTargetY - cpu.speed) cpu.y += cpu.speed;
                 else if (cpu.y > cpuTargetY + cpu.speed) cpu.y -= cpu.speed;
             }
             
-            // Keep CPU in bounds
             if(cpu.y < 0) cpu.y = 0;
             if(cpu.y + cpu.height > CH) cpu.y = CH - cpu.height;
 
@@ -517,17 +546,35 @@
             }
         }
 
-        // Level 2 (Universal Translation)
+        // Level 2 (Universal Translation Helper)
+        function setText(lang) {
+            const area = document.getElementById('prompt-lvl2');
+            if(lang === 'DE') area.value = 'Hallo Team, die Ware (PO-12345) kommt 3 Wochen zu spät. Wir machen uns Sorgen wegen Black Friday. Bitte um Update.';
+            if(lang === 'FR') area.value = 'Bonjour, la commande PO-12345 a 3 semaines de retard. C\'est critique pour le Black Friday. Merci de nous tenir informés.';
+            if(lang === 'IT') area.value = 'Ciao team, la merce PO-12345 è in ritardo di 3 settimane per il Black Friday. Siamo preoccupati. Aggiornateci.';
+            if(lang === 'ES') area.value = 'Hola equipo, el pedido PO-12345 tiene un retraso de 3 semanas. Estamos preocupados por el Black Friday. Por favor, actualizadnos.';
+        }
+
         function runGeminiSim1() {
-            const input = document.getElementById('prompt-lvl2').value;
+            const input = document.getElementById('prompt-lvl2').value.toLowerCase();
             if (input.length < 2) { alert("Please paste some text first!"); return; }
             
             const replyBox = document.getElementById('reply-lvl2');
             replyBox.classList.remove('hidden');
             replyBox.innerHTML = "✨ Detecting language... Translating... Polishing...";
             
+            // Check if user is using the challenge context (PO/Delivery/Delay)
+            // Keywords found in the sample texts
+            const isChallengeText = input.includes("po-12345") || input.includes("12345") || input.includes("black friday") || input.includes("ritardo") || input.includes("retard") || input.includes("delay");
+
             setTimeout(() => {
-                replyBox.innerHTML = "<strong>Subject:</strong> Urgent: PO-12345 Delay Update<br><br>Dear Partner,<br>We noticed a 3-week delay on PO-12345. As this is critical for our Black Friday strategy, please provide an urgent status update.<br>Best,<br>Zalando Team";
+                if (isChallengeText) {
+                    // Standard Challenge Response
+                    replyBox.innerHTML = "<strong>Subject:</strong> Urgent: PO-12345 Delay Update<br><br>Dear Partner,<br>We noticed a 3-week delay on PO-12345. As this is critical for our Black Friday strategy, please provide an urgent status update.<br>Best,<br>Zalando Team";
+                } else {
+                    // "Random Input" Handling - Acknowledge and redirect
+                    replyBox.innerHTML = "✨ <strong>Gemini:</strong> I see you typed custom text! In the real tool, I would translate exactly that.<br><br>For this <strong>Simulation</strong>, let me show you how I handle the <em>Business Case</em> from the challenge:<br><br><strong>Subject:</strong> Urgent: PO-12345 Delay Update<br>Dear Partner, We noticed a 3-week delay... [Standard Output Generated]";
+                }
                 document.getElementById('btn-lvl2').classList.remove('hidden');
             }, 2000);
         }
