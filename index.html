@@ -12,7 +12,7 @@
             --phosphor-main: #ff7700; /* Neon Orange */
             --phosphor-dim: #b35500;  /* Darker Orange */
             --bg-color: #0a0a0a;      /* Deep Black */
-            --overlay-bg: rgba(20, 10, 0, 0.95);
+            --overlay-bg: rgba(20, 10, 0, 0.96);
         }
 
         body {
@@ -66,6 +66,7 @@
             margin: 0;
             font-size: 1.5rem;
             color: var(--phosphor-dim);
+            letter-spacing: 3px;
         }
         
         .gemini-logo-header {
@@ -80,7 +81,6 @@
             border: 4px solid var(--phosphor-main);
             box-shadow: 0 0 25px var(--phosphor-dim);
             background-color: #000;
-            cursor: none;
             width: 800px;
             height: 500px;
             max-width: 95vw;
@@ -167,7 +167,6 @@
             height: 80px;
             opacity: 0.9;
             z-index: 5;
-            /* Filter to match orange theme */
             filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2); 
         }
 
@@ -179,7 +178,6 @@
         
         .gemini-icon-inline {
             height: 20px; width: auto; vertical-align: middle; margin-right: 5px;
-            /* Same filter as header logo for consistency */
             filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
@@ -203,9 +201,6 @@
             vertical-align: middle;
         }
 
-        ul { margin: 10px 0; padding-left: 20px; }
-        li { margin-bottom: 5px; }
-
     </style>
 </head>
 <body>
@@ -217,7 +212,7 @@
             WELCOME TO GEMINI
             <img src="image_e01515.png" alt="" class="gemini-logo-header">
         </h1>
-        <h2>Zalando YF&K Ops Edition</h2>
+        <h2>SERVE • RETURN • ITERATE • REITERATE</h2>
     </header>
 
     <!-- SCORE -->
@@ -238,13 +233,13 @@
         <div class="modal-content">
             <h3>TENNIS FOR TWO: THE MATCH</h3>
             <p style="font-size: 1.3rem; text-align: center;">
-                AI isn't magic, it's a conversation. You serve, it returns.<br>
-                This isn't about winning hard matches, it's about learning the flow.
+                AI isn't magic, it's a conversation. <br>
+                Just like tennis: You Serve, it Returns, then you Iterate.
             </p>
             
             <div class="controls-box">
                 <strong>HOW TO PLAY:</strong><br>
-                Move your MOUSE UP/DOWN to control the LEFT paddle.<br>
+                Use <strong>UP / DOWN ARROWS</strong> on your keyboard to move.<br>
                 Score 1 point to unlock the next Gemini Lesson.
             </div>
 
@@ -252,11 +247,11 @@
         </div>
     </div>
 
-    <!-- LEVEL 1: WORKSPACE INTEGRATION -->
+    <!-- LEVEL 1: THE SERVE (ACCESS) -->
     <div id="screen-level1" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3>⏸️ TIMEOUT: THE WORKSPACE</h3>
-            <p>Great shot! Before the next set, let's get you equipped.</p>
+            <h3>⏸️ PHASE 1: THE SERVE (Access)</h3>
+            <p>Great start! To serve effectively, you need to know where the court is.</p>
             <p><strong>Did you know?</strong> Gemini is seamlessly integrated into your daily tools.</p>
             
             <div class="checklist-item">
@@ -266,52 +261,43 @@
                 <label><input type="checkbox" id="chk2" onchange="validateLvl1()"> 2. Open <a href="https://gemini.google.com" target="_blank" style="color:var(--phosphor-main)">gemini.google.com</a> in a new tab.</label>
             </div>
             <div class="checklist-item">
-                <label><input type="checkbox" id="chk3" onchange="validateLvl1()"> 3. Bookmark it now for quick access.</label>
+                <label><input type="checkbox" id="chk3" onchange="validateLvl1()"> 3. Bookmark it now.</label>
             </div>
 
-            <button id="btn-lvl1" class="btn" disabled onclick="resumeGame(2)">READY FOR SET 2 >></button>
+            <button id="btn-lvl1" class="btn" disabled onclick="resumeGame(2)">READY FOR PHASE 2 >></button>
         </div>
     </div>
 
-    <!-- LEVEL 2: CREATIVITY & TRANSLATION -->
+    <!-- LEVEL 2: THE RETURN (TRANSLATION) -->
     <div id="screen-level2" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3>⏸️ TIMEOUT: CREATIVE POWER</h3>
-            <p><span class="info-pill">PRO TIP</span>Gemini isn't just for text. It's your creative partner.</p>
-            <ul style="font-size: 1.2rem;">
-                <li><strong>Translator:</strong> It speaks fluent Italian, German & English.</li>
-                <li><strong>Veo:</strong> Generates high-quality video content from prompts.</li>
-                <li><strong>Nano Banana:</strong> Use it for quick creative tasks and brainstorming.</li>
-            </ul>
+            <h3>⏸️ PHASE 2: THE RETURN (Language)</h3>
+            <p>Gemini speaks <strong>over 40 languages</strong> (from French to Japanese). You don't need perfect English.</p>
             
-            <p><strong>CHALLENGE:</strong> Let's test the translator. Paste this Italian text below to translate & polish it for a supplier:</p>
-            <div style="background:rgba(255, 100, 0, 0.1); border: 1px dashed var(--phosphor-dim); padding:10px; font-style:italic;">"Ciao, il pacco è arrivato rotto. Dobbiamo fare il reso subito. Grazie."</div>
+            <p><strong>CHALLENGE:</strong> Paste a text in <strong>ANY language</strong> you want (your native language, a dialect, or just test it) and ask Gemini to "Polish for Business English".</p>
             
-            <textarea id="prompt-lvl2" rows="2" placeholder="Paste text here to ask Gemini..."></textarea>
-            <button class="btn" onclick="runGeminiSim1()">ASK GEMINI</button>
+            <textarea id="prompt-lvl2" rows="3" placeholder="Paste your text here (e.g. in Italian, German, Spanish...)"></textarea>
+            <button class="btn" onclick="runGeminiSim1()">SERVE PROMPT</button>
             
             <div id="reply-lvl2" class="gemini-reply hidden"></div>
-            <button id="btn-lvl2" class="btn hidden" onclick="resumeGame(3)">EXCELLENT! FINAL SET >></button>
+            <button id="btn-lvl2" class="btn hidden" onclick="resumeGame(3)">GOOD RETURN! FINAL PHASE >></button>
         </div>
     </div>
 
-    <!-- LEVEL 3: GEMINI 3 & PLANNING -->
+    <!-- LEVEL 3: ITERATE & REITERATE -->
     <div id="screen-level3" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3>⏸️ TIMEOUT: GEMINI 3</h3>
-            <p><span class="info-pill">THE FUTURE IS HERE</span></p>
-            <p>We are just scratching the surface. With the power of <strong>Gemini 3</strong>, you can now:</p>
-            <ul style="font-size: 1.2rem;">
-                <li><strong>Build Webpages:</strong> Turn a simple sketch or text into working code instantly.</li>
-                <li><strong>Plan Holidays:</strong> Find flights, hotels, and create full itineraries in a single prompt.</li>
-            </ul>
+            <h3>⏸️ PHASE 3: ITERATE & REITERATE</h3>
+            <p><span class="info-pill">THE SECRET SAUCE</span></p>
+            <p>A good rally doesn't end after one hit. <strong>Never settle for the first answer.</strong></p>
+            <p>The real value comes when you tell Gemini to adjust, shorten, or change tone. This is the <strong>Reiterate</strong> phase.</p>
             
-            <p><strong>FINAL CHALLENGE:</strong> Ask Gemini 3 to plan a complex task (e.g., a trip or an event).</p>
-            <textarea id="prompt-lvl3" rows="2" placeholder="E.g., Plan a 1-week holiday in Japan with flights..."></textarea>
-            <button class="btn" onclick="runGeminiSim2()">PLAN TRIP</button>
+            <p><strong>CHALLENGE:</strong> The previous output was good, but maybe too long. Ask Gemini to refine it.</p>
+            <textarea id="prompt-lvl3" rows="2" placeholder="E.g., 'Make it shorter' or 'Make it more polite'..."></textarea>
+            <button class="btn" onclick="runGeminiSim2()">REITERATE</button>
 
             <div id="reply-lvl3" class="gemini-reply hidden"></div>
-            <button id="btn-lvl3" class="btn hidden" onclick="triggerWin()">FINISH MATCH</button>
+            <button id="btn-lvl3" class="btn hidden" onclick="triggerWin()">WIN MATCH POINT</button>
         </div>
     </div>
 
@@ -319,9 +305,10 @@
     <div id="screen-win" class="modal-overlay hidden">
         <div class="modal-content" style="text-align: center;">
             <img src="zally.png" alt="Zally Winner" class="zally-win">
-            <h3>🏆 CHAMPION OF ADOPTION! 🏆</h3>
-            <p style="font-size: 1.5rem;">You are now ready to use Gemini.</p>
-            <p>Remember: It's a conversation. Serve, Return, Iterate.</p>
+            <h3>🏆 MATCH WON! 🏆</h3>
+            <h2 style="color:#fff; border-bottom: none;">SERVE • RETURN • ITERATE • REITERATE</h2>
+            <p style="font-size: 1.4rem;">You are now ready to start your Gemini journey.</p>
+            <p>Remember: It's not just a tool, it's a teammate.</p>
             <button class="btn" onclick="location.reload()">PLAY AGAIN</button>
         </div>
     </div>
@@ -336,41 +323,52 @@
         let playerScore = 0;
         let cpuScore = 0;
         let currentLevel = 1; 
+        
+        // Input State
+        const keys = {
+            ArrowUp: false,
+            ArrowDown: false
+        };
 
         // Canvas Dimensions
         const CW = canvas.width;
         const CH = canvas.height;
 
-        // --- SIMPLIFIED SETTINGS (EASY MODE) ---
-        // Ball: Slower speed (3.5) for easier tracking
+        // --- ADJUSTED SETTINGS (KEYBOARD + EASIER AI + SMALLER PADDLES) ---
         const ball = { x: CW/2, y: CH/2, dx: 3.5, dy: 3.5, radius: 8 };
-        // Player: HUGE paddle (150px) to make it very easy
-        const player = { x: 15, y: CH/2 - 75, width: 15, height: 150, dy: 0 };
-        // CPU: Slower speed (3.0) so it misses more often
-        const cpu = { x: CW - 30, y: CH/2 - 75, width: 15, height: 150, speed: 3.0 };
+        
+        // Player: Reduced height (150px -> ~105px), Speed for keyboard
+        const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 6, dy: 0 };
+        
+        // CPU: Reduced height, slower speed (3.0 -> 2.5) for easier win
+        const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.5 };
 
-        // Mouse Control
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const scaleY = canvas.height / rect.height;
-            const mouseY = (e.clientY - rect.top) * scaleY;
-            
-            player.y = mouseY - (player.height/2);
-            
-            // Boundary checks
-            if(player.y < 0) player.y = 0;
-            if(player.y + player.height > CH) player.y = CH - player.height;
+        // KEYBOARD CONTROLS
+        window.addEventListener('keydown', (e) => {
+            if(keys.hasOwnProperty(e.code)) keys[e.code] = true;
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            if(keys.hasOwnProperty(e.code)) keys[e.code] = false;
         });
 
         function resetBall() {
             ball.x = CW / 2;
             ball.y = CH / 2;
             ball.dx = -ball.dx; 
-            ball.dy = (Math.random() * 4) - 2; // Less vertical randomness
+            ball.dy = (Math.random() * 4) - 2; 
         }
 
         function update() {
             if (!gameRunning) return;
+
+            // Move Player (Keyboard)
+            if (keys.ArrowUp && player.y > 0) {
+                player.y -= player.speed;
+            }
+            if (keys.ArrowDown && player.y + player.height < CH) {
+                player.y += player.speed;
+            }
 
             // Move Ball
             ball.x += ball.dx;
@@ -386,8 +384,7 @@
                 ball.y > player.y && ball.y < player.y + player.height) {
                 ball.dx = Math.abs(ball.dx); 
                 let deltaY = ball.y - (player.y + player.height / 2);
-                ball.dy = deltaY * 0.15; // Reduced spin effect
-                // No speed increase in Easy Mode
+                ball.dy = deltaY * 0.15; 
             }
 
             // Paddle Collision CPU
@@ -396,36 +393,31 @@
                 ball.dx = -Math.abs(ball.dx);
             }
 
-            // CPU AI (Imperfect for easy mode)
-            let cpuTargetY = ball.y - (cpu.height/2);
-            // AI reacts slower if ball is far away
-            if(ball.dx < 0 && ball.x < CW/2) cpuTargetY = CH/2 - (cpu.height/2); 
-
-            // Simple movement
-            if (cpu.y < cpuTargetY - cpu.speed) {
-                cpu.y += cpu.speed;
-            } else if (cpu.y > cpuTargetY + cpu.speed) {
-                cpu.y -= cpu.speed;
+            // CPU AI (EASIER LOGIC)
+            // AI only reacts if ball is on its half (x > CW/2) to make it beatable
+            if (ball.x > CW / 2) {
+                let cpuTargetY = ball.y - (cpu.height/2);
+                if (cpu.y < cpuTargetY - cpu.speed) cpu.y += cpu.speed;
+                else if (cpu.y > cpuTargetY + cpu.speed) cpu.y -= cpu.speed;
             }
             
-            // CPU Boundaries
+            // Keep CPU in bounds
             if(cpu.y < 0) cpu.y = 0;
             if(cpu.y + cpu.height > CH) cpu.y = CH - cpu.height;
 
             // Scoring
             if (ball.x < 0) {
                 cpuScore++;
-                resetBall(); // Just reset, don't stop game on lose
+                resetBall(); 
                 updateScoreboard();
             } else if (ball.x > CW) {
                 playerScore++;
                 updateScoreboard();
-                checkScoreTrigger(); // Only trigger levels on win
+                checkScoreTrigger(); 
                 resetBall();
             }
         }
 
-        // Colors from CSS
         const phosphorColor = getComputedStyle(document.documentElement).getPropertyValue('--phosphor-main').trim();
         const phosphorDim = getComputedStyle(document.documentElement).getPropertyValue('--phosphor-dim').trim();
 
@@ -471,17 +463,14 @@
         // --- GAMEFLOW LOGIC ---
 
         function checkScoreTrigger() {
-            // Level 1 after 1 point
             if (currentLevel === 1 && playerScore >= 1) {
                 pauseGame();
                 setTimeout(() => document.getElementById('screen-level1').classList.remove('hidden'), 500);
             }
-            // Level 2 after 2 points
             else if (currentLevel === 2 && playerScore >= 2) {
                 pauseGame();
                 setTimeout(() => document.getElementById('screen-level2').classList.remove('hidden'), 500);
             }
-            // Level 3 after 3 points
             else if (currentLevel === 3 && playerScore >= 3) {
                 pauseGame();
                 setTimeout(() => document.getElementById('screen-level3').classList.remove('hidden'), 500);
@@ -500,7 +489,7 @@
 
         function resumeGame(nextLevelIndex) {
             currentLevel = nextLevelIndex;
-            playerScore = 0; // Reset score for next set
+            playerScore = 0; 
             cpuScore = 0;
             updateScoreboard();
             document.querySelectorAll('.modal-overlay').forEach(el => el.classList.add('hidden'));
@@ -528,38 +517,37 @@
             }
         }
 
-        // Level 2 (Translation)
+        // Level 2 (Universal Translation)
         function runGeminiSim1() {
             const input = document.getElementById('prompt-lvl2').value;
-            if (input.length < 5) { alert("Please paste the text first!"); return; }
+            if (input.length < 2) { alert("Please paste some text first!"); return; }
             
             const replyBox = document.getElementById('reply-lvl2');
             replyBox.classList.remove('hidden');
-            replyBox.innerHTML = "✨ Analyzing with Gemini...";
+            replyBox.innerHTML = "✨ Detecting language... Translating... Polishing...";
             
             setTimeout(() => {
-                replyBox.innerHTML = "<strong>Subject:</strong> Damaged Goods Report<br><br>Hello,<br>We received the shipment, but unfortunately, the package arrived damaged. We need to initiate a return immediately.<br>Thank you.";
+                replyBox.innerHTML = "<strong>Subject:</strong> Urgent: PO-12345 Delay Update<br><br>Dear Partner,<br>We noticed a 3-week delay on PO-12345. As this is critical for our Black Friday strategy, please provide an urgent status update.<br>Best,<br>Zalando Team";
                 document.getElementById('btn-lvl2').classList.remove('hidden');
-            }, 1500);
+            }, 2000);
         }
 
-        // Level 3 (Planning)
+        // Level 3 (Iterate)
         function runGeminiSim2() {
             const input = document.getElementById('prompt-lvl3').value;
             if (input.length < 3) { alert("Please enter a prompt!"); return; }
             
             const replyBox = document.getElementById('reply-lvl3');
             replyBox.classList.remove('hidden');
-            replyBox.innerHTML = "✨ Planning with Gemini 3...";
+            replyBox.innerHTML = "✨ Re-iterating...";
             
             setTimeout(() => {
-                replyBox.innerHTML = "<strong>Trip Proposal:</strong><br>Day 1: Tokyo Arrival & Sushi Dinner<br>Day 2: Kyoto Temple Tour<br>Day 3: Bullet Train to Osaka... [See detailed itinerary & booking links]";
+                replyBox.innerHTML = "<strong>Subject:</strong> PO-12345: Urgent Delay Check<br><br>Hi Team,<br>PO-12345 is 3 weeks late. This is a Black Friday blocker. Please advise ETA ASAP.<br>Thanks.";
                 document.getElementById('btn-lvl3').classList.remove('hidden');
             }, 1500);
         }
         
-        // Initial Draw to load colors
-        draw();
+        draw(); 
 
     </script>
 </body>
