@@ -69,12 +69,11 @@
             letter-spacing: 3px;
         }
         
-        /* LOGO STYLING */
+        /* LOGO STYLING - NO FILTER (Mostra l'immagine originale) */
         .gemini-logo-header {
             height: 40px;
             width: auto;
-            /* Filter to turn the image orange to match the theme */
-            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
+            /* Filtro rimosso per mostrare l'immagine così com'è */
         }
 
         /* GAME CANVAS */
@@ -209,10 +208,9 @@
             filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2);
         }
         
+        /* NO FILTER for inline icon */
         .gemini-icon-inline {
             height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
-            /* Same filter for consistency */
-            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
