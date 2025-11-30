@@ -69,10 +69,11 @@
             letter-spacing: 3px;
         }
         
+        /* LOGO STYLING */
         .gemini-logo-header {
             height: 40px;
             width: auto;
-            /* Filter to make the uploaded image look orange/retro */
+            /* Filter to turn the image orange to match the theme */
             filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
@@ -119,7 +120,7 @@
             text-align: left;
             position: relative;
             background: rgba(0,0,0,0.8);
-            max-height: 90vh; /* Prevent overflow on small screens */
+            max-height: 90vh;
             overflow-y: auto;
         }
 
@@ -210,6 +211,7 @@
         
         .gemini-icon-inline {
             height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
+            /* Same filter for consistency */
             filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
@@ -243,9 +245,9 @@
     <!-- HEADER -->
     <header class="main-header">
         <h1>
-            <img src="image_394515.png" alt="" class="gemini-logo-header">
+            <img src="Gemini-symbol.png" alt="Gemini" class="gemini-logo-header">
             WELCOME TO GEMINI
-            <img src="image_394515.png" alt="" class="gemini-logo-header">
+            <img src="Gemini-symbol.png" alt="Gemini" class="gemini-logo-header">
         </h1>
         <h2>SERVE • RETURN • ITERATE • REITERATE</h2>
     </header>
@@ -290,7 +292,7 @@
             <p><strong>Did you know?</strong> Gemini is seamlessly integrated into your daily tools.</p>
             
             <div class="checklist-item">
-                <label><input type="checkbox" id="chk1" onchange="validateLvl1()"> 1. Check Gmail/Docs side panel for the Gemini symbol <img src="image_394515.png" class="gemini-icon-inline">.</label>
+                <label><input type="checkbox" id="chk1" onchange="validateLvl1()"> 1. Check Gmail/Docs side panel for the Gemini symbol <img src="Gemini-symbol.png" class="gemini-icon-inline">.</label>
             </div>
             <div class="checklist-item">
                 <label><input type="checkbox" id="chk2" onchange="validateLvl1()"> 2. Open <a href="https://gemini.google.com" target="_blank" style="color:var(--phosphor-main)">gemini.google.com</a> in a new tab.</label>
@@ -330,24 +332,24 @@
         </div>
     </div>
 
-    <!-- LEVEL 3: CREATIVITY / MULTIMODAL / GEMINI 3 -->
+    <!-- LEVEL 3: THE FUTURE -->
     <div id="screen-level3" class="modal-overlay hidden">
         <div class="modal-content">
             <h3>⏸️ PHASE 3: THE CREATIVE SHOT</h3>
             <p><span class="info-pill">GEMINI IS MULTIMODAL & FUTURE READY</span></p>
-            <p>Gemini isn't just about text. It helps you create & plan.</p>
+            <p>Gemini isn't just about text. It helps you create, plan, and innovate.</p>
             <ul>
-                <li><strong>Image Generation:</strong> Create visuals for slides or mockups instantly.</li>
-                <li><strong>Veo / Nano Banana:</strong> Future tools for video & creative brainstorming.</li>
-                <li><strong>Gemini 3 Power:</strong> Coming soon - Build webpages from sketches & plan complex team holidays in seconds.</li>
+                <li><strong>Veo:</strong> Generate high-quality videos for your presentations.</li>
+                <li><strong>Nano Banana:</strong> Use it for quick creative brainstorming.</li>
+                <li><strong>Gemini 3:</strong> Build webpages & complex plans instantly.</li>
+                <li><strong>Image Generation:</strong> Create visuals for slides or mockups.</li>
             </ul>
             
-            <p><strong>CHALLENGE:</strong> Ask Gemini to create an image for your "Black Friday" campaign.</p>
-            <textarea id="prompt-lvl3" rows="2" placeholder="E.g., 'Generate an image of a futuristic neon sneaker for Black Friday'..."></textarea>
-            <button class="btn" onclick="runGeminiSim2()">GENERATE IMAGE</button>
-
-            <div id="reply-lvl3" class="gemini-reply hidden"></div>
-            <button id="btn-lvl3" class="btn hidden" onclick="triggerWin()">WIN MATCH POINT</button>
+            <p style="margin-top: 30px; text-align: center;">
+                <em>(This phase is information only - You are ready!)</em>
+            </p>
+            
+            <button id="btn-lvl3" class="btn" onclick="triggerWin()">WIN MATCH POINT</button>
         </div>
     </div>
 
@@ -374,6 +376,10 @@
         let cpuScore = 0;
         let currentLevel = 1; 
         
+        // Auto-win Logic (20 Seconds Rule)
+        let rallyStartTime = 0;
+        const AUTO_WIN_TIME = 20000; // 20 seconds
+
         // Input State
         const keys = { ArrowUp: false, ArrowDown: false };
 
@@ -401,10 +407,21 @@
             ball.y = CH / 2;
             ball.dx = -ball.dx; 
             ball.dy = (Math.random() * 4) - 2; 
+            rallyStartTime = Date.now(); // Reset timer on serve
         }
 
         function update() {
             if (!gameRunning) return;
+
+            // --- AUTO WIN CHECK ---
+            // If rally lasts > 20 seconds, Player gets the point
+            if (Date.now() - rallyStartTime > AUTO_WIN_TIME) {
+                playerScore++;
+                updateScoreboard();
+                checkScoreTrigger();
+                resetBall();
+                return; // Stop update for this frame
+            }
 
             // Move Player
             if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
@@ -511,6 +528,7 @@
         function startGame() {
             document.getElementById('screen-start').classList.add('hidden');
             gameRunning = true;
+            resetBall(); // Init timer
             draw();
         }
 
@@ -581,24 +599,7 @@
             }, 2000);
         }
 
-        // Level 3 (Creativity & Image Gen)
-        function runGeminiSim2() {
-            const input = document.getElementById('prompt-lvl3').value;
-            if (input.length < 3) { alert("Please enter a prompt!"); return; }
-            
-            const replyBox = document.getElementById('reply-lvl3');
-            replyBox.classList.remove('hidden');
-            replyBox.innerHTML = "✨ Generating Image...";
-            
-            setTimeout(() => {
-                // Displays the actual image uploaded by the user
-                replyBox.innerHTML = `
-                    <strong>[Image Generated]:</strong><br>
-                    <img src="image_385fbe.png" alt="Generated Sneaker" style="max-width:100%; border:2px solid #fff; margin-top:10px; border-radius:5px; box-shadow: 0 0 15px var(--phosphor-main);">
-                    <br><em>(Gemini can create visuals for your slides instantly!)</em>`;
-                document.getElementById('btn-lvl3').classList.remove('hidden');
-            }, 1500);
-        }
+        // Level 3 is now purely informational
         
         draw(); 
 
