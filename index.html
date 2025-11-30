@@ -73,7 +73,7 @@
         .gemini-logo-header {
             height: 40px;
             width: auto;
-            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
+            /* No filter needed if image is already correct, but keeping brightness logic just in case */
         }
 
         /* GAME CANVAS */
@@ -192,11 +192,11 @@
             font-style: italic;
         }
 
-        /* ZALLY STYLING - UPDATED POSITION & ANIMATION */
+        /* ZALLY STYLING */
         .zally-corner {
             position: fixed;
             bottom: 20px; 
-            left: 20px; /* Spostato a SINISTRA */
+            left: 20px; 
             height: 90px;
             opacity: 0.9;
             z-index: 5;
@@ -204,16 +204,15 @@
             transition: transform 0.2s ease;
         }
 
-        /* Classe per l'animazione del salto */
         .zally-jump-anim {
             animation: jump 0.6s ease-in-out;
         }
 
         @keyframes jump {
             0% { transform: translateY(0); }
-            30% { transform: translateY(-40px) scale(1.1); } /* Salta in alto e si ingrandisce un po' */
+            30% { transform: translateY(-40px) scale(1.1); }
             60% { transform: translateY(0); }
-            80% { transform: translateY(-10px); } /* Piccolo rimbalzo finale */
+            80% { transform: translateY(-10px); } 
             100% { transform: translateY(0); }
         }
 
@@ -225,7 +224,6 @@
         
         .gemini-icon-inline {
             height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
-            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -400,10 +398,16 @@
         const CW = canvas.width;
         const CH = canvas.height;
 
-        // --- SETTINGS: KEYBOARD + EASY AI + SMALL PADDLES ---
-        const ball = { x: CW/2, y: CH/2, dx: 3.5, dy: 3.5, radius: 8 };
-        const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 6, dy: 0 };
-        const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.5 };
+        // --- SETTINGS: FASTER GAMEPLAY (UPDATED) ---
+        // Increased ball speed (from 3.5 to 6)
+        const ball = { x: CW/2, y: CH/2, dx: 6, dy: 6, radius: 8 };
+        
+        // Increased Player speed (from 6 to 10) to match ball speed
+        // Paddle size kept large (~105px)
+        const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 10, dy: 0 };
+        
+        // Increased CPU speed (from 2.5 to 5) to be challenging but beatable
+        const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 5 };
 
         // KEYBOARD CONTROLS
         window.addEventListener('keydown', (e) => {
@@ -417,16 +421,15 @@
             ball.x = CW / 2;
             ball.y = CH / 2;
             ball.dx = -ball.dx; 
-            ball.dy = (Math.random() * 4) - 2; 
+            ball.dy = (Math.random() * 6) - 3; // Slightly more vertical variation
             rallyStartTime = Date.now(); 
         }
 
         // --- ZALLY ANIMATION FUNCTION ---
         function animateZally() {
             const zally = document.getElementById('zallyCoach');
-            // Reset animation to allow re-trigger
             zally.classList.remove('zally-jump-anim');
-            void zally.offsetWidth; // Trigger reflow
+            void zally.offsetWidth; 
             zally.classList.add('zally-jump-anim');
         }
 
@@ -436,7 +439,7 @@
             // --- AUTO WIN CHECK ---
             if (Date.now() - rallyStartTime > AUTO_WIN_TIME) {
                 playerScore++;
-                animateZally(); // Zally salta anche per auto-win
+                animateZally(); 
                 updateScoreboard();
                 checkScoreTrigger();
                 resetBall();
@@ -459,14 +462,14 @@
                 ball.y > player.y && ball.y < player.y + player.height) {
                 ball.dx = Math.abs(ball.dx); 
                 let deltaY = ball.y - (player.y + player.height / 2);
-                ball.dy = deltaY * 0.15; 
+                ball.dy = deltaY * 0.2; // Slightly more spin with higher speed
             }
             if (ball.x + ball.radius > cpu.x && 
                 ball.y > cpu.y && ball.y < cpu.y + cpu.height) {
                 ball.dx = -Math.abs(ball.dx);
             }
 
-            // CPU AI (Easy)
+            // CPU AI
             if (ball.x > CW / 2) {
                 let cpuTargetY = ball.y - (cpu.height/2);
                 if (cpu.y < cpuTargetY - cpu.speed) cpu.y += cpu.speed;
@@ -477,14 +480,12 @@
 
             // Scoring
             if (ball.x < 0) {
-                // CPU Point
                 cpuScore++;
                 resetBall(); 
                 updateScoreboard();
             } else if (ball.x > CW) {
-                // Player Point
                 playerScore++;
-                animateZally(); // SALTA ZALLY!
+                animateZally(); 
                 updateScoreboard();
                 checkScoreTrigger(); 
                 resetBall();
@@ -551,7 +552,7 @@
         function startGame() {
             document.getElementById('screen-start').classList.add('hidden');
             gameRunning = true;
-            resetBall(); // Init timer
+            resetBall(); 
             draw();
         }
 
