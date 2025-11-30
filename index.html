@@ -69,11 +69,11 @@
             letter-spacing: 3px;
         }
         
-        /* LOGO STYLING - NO FILTER (Mostra l'immagine originale) */
+        /* LOGO STYLING */
         .gemini-logo-header {
             height: 40px;
             width: auto;
-            /* Filtro rimosso per mostrare l'immagine così com'è */
+            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
         /* GAME CANVAS */
@@ -192,14 +192,29 @@
             font-style: italic;
         }
 
-        /* Images */
+        /* ZALLY STYLING - UPDATED POSITION & ANIMATION */
         .zally-corner {
             position: fixed;
-            bottom: 20px; right: 20px;
-            height: 80px;
+            bottom: 20px; 
+            left: 20px; /* Spostato a SINISTRA */
+            height: 90px;
             opacity: 0.9;
             z-index: 5;
-            filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2); 
+            filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2);
+            transition: transform 0.2s ease;
+        }
+
+        /* Classe per l'animazione del salto */
+        .zally-jump-anim {
+            animation: jump 0.6s ease-in-out;
+        }
+
+        @keyframes jump {
+            0% { transform: translateY(0); }
+            30% { transform: translateY(-40px) scale(1.1); } /* Salta in alto e si ingrandisce un po' */
+            60% { transform: translateY(0); }
+            80% { transform: translateY(-10px); } /* Piccolo rimbalzo finale */
+            100% { transform: translateY(0); }
         }
 
         .zally-win {
@@ -208,9 +223,9 @@
             filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2);
         }
         
-        /* NO FILTER for inline icon */
         .gemini-icon-inline {
             height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
+            filter: brightness(0) saturate(100%) invert(55%) sepia(85%) saturate(2000%) hue-rotate(10deg) brightness(100%) contrast(105%);
         }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -260,8 +275,8 @@
     <!-- GAME CANVAS -->
     <canvas id="gameCanvas" width="800" height="500"></canvas>
 
-    <!-- ZALLY REFEREE -->
-    <img src="zally.png" alt="Zally Referee" class="zally-corner">
+    <!-- ZALLY COACH (Sinistra) -->
+    <img src="zally.png" alt="Zally Coach" class="zally-corner" id="zallyCoach">
 
     <!-- START SCREEN -->
     <div id="screen-start" class="modal-overlay">
@@ -376,7 +391,7 @@
         
         // Auto-win Logic (20 Seconds Rule)
         let rallyStartTime = 0;
-        const AUTO_WIN_TIME = 20000; // 20 seconds
+        const AUTO_WIN_TIME = 20000; 
 
         // Input State
         const keys = { ArrowUp: false, ArrowDown: false };
@@ -387,9 +402,7 @@
 
         // --- SETTINGS: KEYBOARD + EASY AI + SMALL PADDLES ---
         const ball = { x: CW/2, y: CH/2, dx: 3.5, dy: 3.5, radius: 8 };
-        // Player: Reduced height (~105px)
         const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 6, dy: 0 };
-        // CPU: Slower speed (2.5)
         const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.5 };
 
         // KEYBOARD CONTROLS
@@ -405,20 +418,29 @@
             ball.y = CH / 2;
             ball.dx = -ball.dx; 
             ball.dy = (Math.random() * 4) - 2; 
-            rallyStartTime = Date.now(); // Reset timer on serve
+            rallyStartTime = Date.now(); 
+        }
+
+        // --- ZALLY ANIMATION FUNCTION ---
+        function animateZally() {
+            const zally = document.getElementById('zallyCoach');
+            // Reset animation to allow re-trigger
+            zally.classList.remove('zally-jump-anim');
+            void zally.offsetWidth; // Trigger reflow
+            zally.classList.add('zally-jump-anim');
         }
 
         function update() {
             if (!gameRunning) return;
 
             // --- AUTO WIN CHECK ---
-            // If rally lasts > 20 seconds, Player gets the point
             if (Date.now() - rallyStartTime > AUTO_WIN_TIME) {
                 playerScore++;
+                animateZally(); // Zally salta anche per auto-win
                 updateScoreboard();
                 checkScoreTrigger();
                 resetBall();
-                return; // Stop update for this frame
+                return; 
             }
 
             // Move Player
@@ -455,11 +477,14 @@
 
             // Scoring
             if (ball.x < 0) {
+                // CPU Point
                 cpuScore++;
                 resetBall(); 
                 updateScoreboard();
             } else if (ball.x > CW) {
+                // Player Point
                 playerScore++;
+                animateZally(); // SALTA ZALLY!
                 updateScoreboard();
                 checkScoreTrigger(); 
                 resetBall();
@@ -552,7 +577,6 @@
 
         // --- INTERACTION LOGIC ---
 
-        // Level 1
         function validateLvl1() {
             const c1 = document.getElementById('chk1').checked;
             const c2 = document.getElementById('chk2').checked;
@@ -564,7 +588,6 @@
             }
         }
 
-        // Level 2 (Universal Translation Helper)
         function setText(lang) {
             const area = document.getElementById('prompt-lvl2');
             if(lang === 'DE') area.value = 'Hallo Partner, die PO-Bestätigung für die Black Friday-Woche ist überfällig. Schickt sie sofort, wir brauchen auch die AMDs, schnell!';
@@ -596,8 +619,6 @@
                 document.getElementById('btn-lvl2').classList.remove('hidden');
             }, 2000);
         }
-
-        // Level 3 is now purely informational
         
         draw(); 
 
