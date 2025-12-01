@@ -73,7 +73,6 @@
         .gemini-logo-header {
             height: 40px;
             width: auto;
-            /* No filter needed if image is already correct, but keeping brightness logic just in case */
         }
 
         /* GAME CANVAS */
@@ -398,16 +397,17 @@
         const CW = canvas.width;
         const CH = canvas.height;
 
-        // --- SETTINGS: FASTER GAMEPLAY (UPDATED) ---
-        // Increased ball speed (from 3.5 to 6)
-        const ball = { x: CW/2, y: CH/2, dx: 6, dy: 6, radius: 8 };
+        // --- SETTINGS: BALANCED GAMEPLAY ---
+        // Ball speed 5: Fast enough to be fun, slow enough to track
+        const ball = { x: CW/2, y: CH/2, dx: 5, dy: 5, radius: 8 };
         
-        // Increased Player speed (from 6 to 10) to match ball speed
+        // Player speed 8: Faster than ball = total control
         // Paddle size kept large (~105px)
-        const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 10, dy: 0 };
+        const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 8, dy: 0 };
         
-        // Increased CPU speed (from 2.5 to 5) to be challenging but beatable
-        const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 5 };
+        // CPU speed 2.8: SLOWER than ball = "Clumsy" AI
+        // This means if the ball moves vertically fast, CPU will miss
+        const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.8 };
 
         // KEYBOARD CONTROLS
         window.addEventListener('keydown', (e) => {
@@ -421,7 +421,7 @@
             ball.x = CW / 2;
             ball.y = CH / 2;
             ball.dx = -ball.dx; 
-            ball.dy = (Math.random() * 6) - 3; // Slightly more vertical variation
+            ball.dy = (Math.random() * 6) - 3; 
             rallyStartTime = Date.now(); 
         }
 
@@ -462,7 +462,7 @@
                 ball.y > player.y && ball.y < player.y + player.height) {
                 ball.dx = Math.abs(ball.dx); 
                 let deltaY = ball.y - (player.y + player.height / 2);
-                ball.dy = deltaY * 0.2; // Slightly more spin with higher speed
+                ball.dy = deltaY * 0.2; 
             }
             if (ball.x + ball.radius > cpu.x && 
                 ball.y > cpu.y && ball.y < cpu.y + cpu.height) {
