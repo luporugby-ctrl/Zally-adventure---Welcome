@@ -60,7 +60,8 @@
             letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center; /* Ensures content is centered horizontally */
+            gap: 20px; /* Increased gap for better spacing */
         }
         .main-header h2 {
             margin: 0;
@@ -69,10 +70,12 @@
             letter-spacing: 3px;
         }
         
-        /* LOGO STYLING */
+        /* LOGO STYLING - UPDATED SIZE & POSITION */
         .gemini-logo-header {
-            height: 40px;
+            height: 65px; /* Increased from 40px for better visibility */
             width: auto;
+            position: relative;
+            top: -2px; /* Fine-tuning vertical alignment */
         }
 
         /* GAME CANVAS */
@@ -210,9 +213,9 @@
 
         @keyframes somersault {
             0% { transform: translateY(0) rotate(0deg); }
-            40% { transform: translateY(-70px) rotate(180deg) scale(1.1); } /* Jump high & rotate half */
-            80% { transform: translateY(0) rotate(360deg); } /* Land & complete rotation */
-            90% { transform: translateY(-10px) rotate(360deg); } /* Small bounce */
+            40% { transform: translateY(-70px) rotate(180deg) scale(1.1); } 
+            80% { transform: translateY(0) rotate(360deg); } 
+            90% { transform: translateY(-10px) rotate(360deg); }
             100% { transform: translateY(0) rotate(360deg); }
         }
 
@@ -222,8 +225,14 @@
             filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.2);
         }
         
+        /* INLINE ICON SIZE INCREASED */
         .gemini-icon-inline {
-            height: 25px; width: auto; vertical-align: middle; margin: 0 5px;
+            height: 35px; /* Increased from 25px */
+            width: auto; 
+            vertical-align: middle; 
+            margin: 0 5px;
+            position: relative;
+            top: -3px; /* Adjusted alignment */
         }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -431,7 +440,7 @@
         function animateZally() {
             const zally = document.getElementById('zallyCoach');
             zally.classList.remove('zally-jump-anim');
-            void zally.offsetWidth; // Trigger reflow
+            void zally.offsetWidth; 
             zally.classList.add('zally-jump-anim');
         }
 
@@ -584,9 +593,9 @@
             const c1 = document.getElementById('chk1').checked;
             const c2 = document.getElementById('chk2').checked;
             const c3 = document.getElementById('chk3').checked;
-            const c4 = document.getElementById('chk4').checked; // Checkbox 4
+            const c4 = document.getElementById('chk4').checked;
             const btn = document.getElementById('btn-lvl1');
-            if(c1 && c2 && c3 && c4) { // All 4 must be checked
+            if(c1 && c2 && c3 && c4) { 
                 btn.disabled = false;
                 btn.innerText = "ACCESS GRANTED - PLAY SET 2 >>";
             }
