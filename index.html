@@ -203,16 +203,17 @@
             transition: transform 0.2s ease;
         }
 
+        /* SOMERSAULT ANIMATION */
         .zally-jump-anim {
-            animation: jump 0.6s ease-in-out;
+            animation: somersault 0.8s ease-in-out;
         }
 
-        @keyframes jump {
-            0% { transform: translateY(0); }
-            30% { transform: translateY(-40px) scale(1.1); }
-            60% { transform: translateY(0); }
-            80% { transform: translateY(-10px); } 
-            100% { transform: translateY(0); }
+        @keyframes somersault {
+            0% { transform: translateY(0) rotate(0deg); }
+            40% { transform: translateY(-70px) rotate(180deg) scale(1.1); } /* Jump high & rotate half */
+            80% { transform: translateY(0) rotate(360deg); } /* Land & complete rotation */
+            90% { transform: translateY(-10px) rotate(360deg); } /* Small bounce */
+            100% { transform: translateY(0) rotate(360deg); }
         }
 
         .zally-win {
@@ -406,7 +407,6 @@
         const player = { x: 15, y: CH/2 - 52, width: 15, height: 105, speed: 8, dy: 0 };
         
         // CPU speed 2.8: SLOWER than ball = "Clumsy" AI
-        // This means if the ball moves vertically fast, CPU will miss
         const cpu = { x: CW - 30, y: CH/2 - 52, width: 15, height: 105, speed: 2.8 };
 
         // KEYBOARD CONTROLS
@@ -429,7 +429,7 @@
         function animateZally() {
             const zally = document.getElementById('zallyCoach');
             zally.classList.remove('zally-jump-anim');
-            void zally.offsetWidth; 
+            void zally.offsetWidth; // Trigger reflow
             zally.classList.add('zally-jump-anim');
         }
 
@@ -485,7 +485,7 @@
                 updateScoreboard();
             } else if (ball.x > CW) {
                 playerScore++;
-                animateZally(); 
+                animateZally(); // ZALLY SOMERSAULT!
                 updateScoreboard();
                 checkScoreTrigger(); 
                 resetBall();
