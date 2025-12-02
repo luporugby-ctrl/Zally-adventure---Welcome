@@ -310,6 +310,9 @@
             <div class="checklist-item">
                 <label><input type="checkbox" id="chk3" onchange="validateLvl1()"> 3. Bookmark <a href="https://gemini.google.com" target="_blank" style="color:var(--phosphor-main)">gemini.google.com</a>.</label>
             </div>
+            <div class="checklist-item">
+                <label><input type="checkbox" id="chk4" onchange="validateLvl1()"> 4. Check Gmail/Docs side panel for the Gemini symbol <img src="Gemini-symbol.png" class="gemini-icon-inline">.</label>
+            </div>
 
             <button id="btn-lvl1" class="btn" disabled onclick="resumeGame(2)">READY FOR PHASE 2 >></button>
         </div>
@@ -581,8 +584,9 @@
             const c1 = document.getElementById('chk1').checked;
             const c2 = document.getElementById('chk2').checked;
             const c3 = document.getElementById('chk3').checked;
+            const c4 = document.getElementById('chk4').checked; // Checkbox 4
             const btn = document.getElementById('btn-lvl1');
-            if(c1 && c2 && c3) {
+            if(c1 && c2 && c3 && c4) { // All 4 must be checked
                 btn.disabled = false;
                 btn.innerText = "ACCESS GRANTED - PLAY SET 2 >>";
             }
