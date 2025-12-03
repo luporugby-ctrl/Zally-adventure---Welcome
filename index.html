@@ -70,12 +70,12 @@
             letter-spacing: 3px;
         }
         
-        /* LOGO STYLING - UPDATED SIZE & POSITION */
+        /* LOGO STYLING - EXTRA MEGA SIZE */
         .gemini-logo-header {
-            height: 65px; /* Increased from 40px for better visibility */
+            height: 115px; /* Increased to 115px */
             width: auto;
             position: relative;
-            top: -2px; /* Fine-tuning vertical alignment */
+            top: -4px; /* Fine-tuning vertical alignment */
         }
 
         /* GAME CANVAS */
@@ -213,9 +213,9 @@
 
         @keyframes somersault {
             0% { transform: translateY(0) rotate(0deg); }
-            40% { transform: translateY(-70px) rotate(180deg) scale(1.1); } 
-            80% { transform: translateY(0) rotate(360deg); } 
-            90% { transform: translateY(-10px) rotate(360deg); }
+            40% { transform: translateY(-70px) rotate(180deg) scale(1.1); } /* Jump high & rotate half */
+            80% { transform: translateY(0) rotate(360deg); } /* Land & complete rotation */
+            90% { transform: translateY(-10px) rotate(360deg); } /* Small bounce */
             100% { transform: translateY(0) rotate(360deg); }
         }
 
@@ -362,9 +362,9 @@
             <p>Gemini isn't just about text. It helps you create, plan, and innovate.</p>
             <ul>
                 <li><strong>Veo:</strong> Generate high-quality videos for your presentations.</li>
-                <li><strong>Nano Banana:</strong> Use it for quick creative brainstorming.</li>
-                <li><strong>Gemini 3:</strong> Build webpages & complex plans instantly.</li>
-                <li><strong>Image Generation:</strong> Create visuals for slides or mockups.</li>
+                <li><strong>Nano Banana Pro:</strong> Advanced image creation for your projects.</li>
+                <li><strong>Canva:</strong> Create infographics or webpages instantly.</li>
+                <li><strong>Gemini 3:</strong> Your holiday planner, shopping assistant, and much more.</li>
             </ul>
             
             <p style="margin-top: 30px; text-align: center;">
@@ -440,7 +440,7 @@
         function animateZally() {
             const zally = document.getElementById('zallyCoach');
             zally.classList.remove('zally-jump-anim');
-            void zally.offsetWidth; 
+            void zally.offsetWidth; // Trigger reflow
             zally.classList.add('zally-jump-anim');
         }
 
